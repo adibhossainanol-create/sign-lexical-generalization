@@ -1,0 +1,15 @@
+{
+  "format": "ffmpeg crop=w:h:x:y, in pixels of LHM's full-resolution 608x1008 render",
+  "measured": "One box per signer, not per clip, so framing is identical across every sign a signer performs. Measured on the frame at t=0.2 s of that signer's first render (s<N>_01_good.mp4). Foreground = pixels with R+G+B < 720 on the white background. Width = 2.0 x the foreground width, centred on the foreground; height = 1.25 x width; top edge placed 4% of the height above the highest foreground pixel; clamped to the frame. Re-measuring the renders with this rule reproduces every box below exactly.",
+  "used_by": [
+    "pipeline/prep_for_spotter.sh",
+    "controls/spotter_negative_control.py (CROP)"
+  ],
+  "boxes": {
+    "s1": "276:345:217:147",
+    "s2": "318:397:196:124",
+    "s3": "322:402:194:127",
+    "s4": "276:345:217:148",
+    "s5": "308:385:201:126"
+  }
+}
