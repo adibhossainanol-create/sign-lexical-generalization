@@ -1,38 +1,4 @@
-#!/usr/bin/env python3
-"""
-geodesic_validation.py
 
-Answers the SO(3) criticism:
-
-  "articulation variance, temporal mean, and scaling are computed directly in
-   axis-angle coordinates, but rotations live on SO(3). The metric/refiner is
-   therefore representation-dependent. An SO(3)-aware/geodesic validation is
-   needed."
-
-The criticism is correct and cannot be argued away. What CAN be established is
-whether it threatens the conclusions. So we recompute articulation properly on
-the manifold --
-
-  mean      : chordal/projected mean (SVD of the arithmetic mean of R_t),
-              not the arithmetic mean of axis-angle vectors
-  deviation : geodesic angle  theta_t = arccos((tr(Rbar^T R_t) - 1)/2)
-  spread    : Frechet variance  E[theta^2]   (radians^2, same units as before)
-
--- and check whether the three things the paper claims survive:
-
-  (1) the ORDERING of configurations by articulation
-  (2) the dominance INVERSION (pretrained quiet on the dominant hand)
-  (3) the articulation RATIO against real signing, roughly in magnitude
-
-If all three hold, the metric is representation-dependent but the conclusions
-are not, and that is a one-sentence answer to the reviewer. If they do not
-hold, we need to know now.
-
-  nohup python geodesic_validation.py \
-      --real-dir feats274 --wlasl $SA/WLASL_v0.3.json \
-      --glosses seen_glosses.json \
-      > /tmp/geo.log 2>&1 &
-"""
 import argparse, json, re, sys
 from collections import defaultdict
 from pathlib import Path
