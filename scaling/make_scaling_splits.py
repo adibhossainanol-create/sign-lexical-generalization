@@ -1,43 +1,5 @@
 #!/usr/bin/env python3
-"""
-make_scaling_splits.py
 
-Builds the training splits for the vocabulary scaling curve.
-
-THE QUESTION: held-out correctness is at chance. Is that because 99 glosses is
-too small a vocabulary to generalise from, or simply because 794 clips is not
-much data? Those are different papers and the curve has to separate them.
-
-FIVE ARMS:
-  vocab25            25 glosses, all their clips      (~200 clips, ~8/gloss)
-  vocab50            50 glosses, all their clips      (~400 clips, ~8/gloss)
-  vocab99            99 glosses, all their clips      ( 794 clips, ~8/gloss)
-  vocab99_budget200  99 glosses, clips matched to vocab25  (~2/gloss)
-  vocab99_budget400  99 glosses, clips matched to vocab50  (~4/gloss)
-
-  vocab25 vs vocab99           : vocabulary AND data grow -> the raw trend
-  vocab50 vs vocab99_budget400 : SAME data, 2x vocabulary -> isolates vocabulary
-  vocab99 vs vocab99_budget400 : SAME vocabulary, 2x data -> isolates volume
-
-vocab99_budget400 (~4/gloss) is the informative control; budget200 (~2/gloss)
-is kept as the thinner end of the same axis but is likely too sparse to read.
-
-The gloss sets are NESTED against one shuffled ordering, so
-vocab25 c vocab50 c vocab99 -- otherwise the curve confounds vocabulary size
-with WHICH glosses happened to be drawn.
-
-Reads the real training split (datasets/annotations/wlasl274/splits/train.txt,
-794 clips over 99 glosses) -- the same data train.py consumes. NOT
-adapter_data_gloss.npz, which is the SignAvatars adapter subset (694 clips) and
-is never read by train.py.
-
-The 25 HELD-OUT glosses are untouched: no arm may contain a clip whose gloss is
-held out, and that is asserted per arm rather than assumed.
-
-  python make_scaling_splits.py
-  # then, per arm:
-  python train.py run_name=scale_vocab25 train_split=vocab25 ckpt=null
-"""
 import argparse
 import json
 from collections import defaultdict
