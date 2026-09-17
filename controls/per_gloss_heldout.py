@@ -1,20 +1,4 @@
-#!/usr/bin/env python3
-"""
-per_gloss_heldout.py
 
-The professor asked whether aggregate metrics hide glosses that work. Held-out
-top-1 is 0-3 of 25 for every model, and chance is 0.040, so the expected number
-correct by chance is exactly 1. The question is whether the same glosses succeed
-across models -- which would mean a few signs are genuinely learnable -- or
-different ones each time, which is chance.
-
-CPU only, seconds.
-
-  python per_gloss_heldout.py --hits base=hits_held_base.json \
-      --hits ft=hits_held_ft.json --hits kl01=hits_held_kl01.json \
-      --hits pres01=hits_held_pres01.json --hits pres05=hits_held_pres05.json \
-      --hits pres20=hits_held_pres20.json --hits scratch=hits_held_scratch.json
-"""
 import argparse, json
 from collections import defaultdict
 from statistics import mean
