@@ -1,27 +1,5 @@
 #!/usr/bin/env python3
-"""
-memorization_check.py
 
-The seen-gloss result (top-1 0.920) sits ABOVE the real->real ceiling (0.607).
-A generated clip cannot legitimately be more retrievable than real clips are of
-each other unless it is reproducing a specific real clip. This script decides
-between two readings:
-
-  MEMORIZATION  generated clips are near-duplicates of particular training
-                clips. Nearest-neighbour distances will be much smaller than
-                real-to-real NN distances, the same clip will be retrieved
-                across independent seeds, and few distinct clips will be hit.
-
-  GENUINE       generated clips land in the right gloss neighbourhood without
-                copying one exemplar. NN distances look like real-to-real,
-                different seeds retrieve different clips of the same gloss.
-
-  nohup python memorization_check.py \
-      --real-dir feats274 --wlasl $SA/WLASL_v0.3.json \
-      --glosses seen_glosses.json \
-      --gen ft=gen_seen_ft --gen kl01=gen_seen_kl01 --gen base=gen_seen_base \
-      > /tmp/memo.log 2>&1 &
-"""
 import argparse, json, re, sys
 from collections import defaultdict, Counter
 from pathlib import Path
