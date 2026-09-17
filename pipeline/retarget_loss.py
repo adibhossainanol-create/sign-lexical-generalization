@@ -1,44 +1,4 @@
-"""
-retarget_loss.py
-================
-The retargeting loss the professor asked for: instead of regressing joint
-ANGLES, apply the pose to a specific body and compare 3D joint POSITIONS.
 
-    retargeted_GT = SMPLX(pose=GT_pose,        betas=person)  -> 3D hand joints
-    prediction    = SMPLX(pose=adapter_output, betas=person)  -> 3D hand joints
-    loss          = ||prediction - retargeted_GT||  (+ velocity term)
-
-Why this is better than the current nn.MSELoss on axis-angle:
-  1. GEOMETRICALLY CORRECT. Axis-angle is not Euclidean -- numerically distant
-     vectors can be nearly identical rotations (worst near the +/-pi wrap).
-     3D positions are Euclidean, so this weakness disappears without needing
-     a separate 6D-rotation change.
-  2. SHAPE-AWARE. Identical joint angles put fingertips in different places on
-     different bodies. The angle loss cannot see that; this can. That is what
-     makes it *retargeting* rather than plain pose regression.
-  3. INTERPRETABLE. Error is in metres (report mm), i.e. standard 3D MPJPE.
-  4. TEMPORAL. The velocity term targets the MEASURED failure mode (static
-     freeze / range collapse), which a per-frame loss cannot see.
-
-Design notes:
-  - Body pose is held at zero so the loss isolates HANDSHAPE. Body shape
-    enters only through `betas` -- exactly the retargeting claim.
-  - Hand joints are expressed RELATIVE TO THEIR OWN WRIST, so a change in
-    body shape does not show up as a constant offset.
-  - flat_hand_mean=True must match the rest of the pipeline. With False,
-    a systematic curl is added to all 15 finger joints (this is the bug that
-    once made every sign render as a fist).
-
-Usage:
-    # one-time, ~9 min on CPU
-    python retarget_loss.py precompute \
-        --npz .../adapter_data.npz --out .../retarget_gt.npz --n-shapes 8
-
-    # in the training script
-    from retarget_loss import RetargetLoss
-    lossf = RetargetLoss(MODEL_PATH, w_vel=1.0)
-    loss  = lossf(pred_pose, gt_joints, betas)
-"""
 import argparse
 import os
 
