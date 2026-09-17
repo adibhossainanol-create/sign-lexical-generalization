@@ -27,6 +27,7 @@ does more data or longer training.
 | I want to… | Go to |
 |---|---|
 | Reproduce the main result | [`eval/`](eval/) + [`splits/`](splits/) |
+| See what it produces | [`demo/README.md`](demo/README.md) |
 | Generate a signing video from one photo | [`pipeline/`](pipeline/) |
 | Re-run the scaling experiment | [`scaling/`](scaling/) |
 | Check the result isn't an artifact | [`controls/`](controls/) |
@@ -44,11 +45,10 @@ held-out-glosses/
 ├── LICENSE                  Apache-2.0
 ├── requirements.txt
 │
-├── assets/                  ← the images and clips on this page
+├── assets/                  ← the images on this page
 │   ├── teaser.png                the five-subject strip (fig_identity.pdf as PNG)
 │   ├── demo.gif                  one sign, one subject, loops
-│   ├── identity_grid.gif         same motion, five subjects, side by side
-│   └── clips/                    s1_cold.mp4, s3_weather.mp4, s5_finish.mp4
+│   └── identity_grid.gif         same motion, five subjects, side by side
 │
 ├── splits/                  ← the smallest useful artifact
 │   ├── train.txt                 794 clips, 99 glosses
@@ -89,9 +89,17 @@ held-out-glosses/
 │   ├── make_scaling_splits.py    builds splits/ from train.txt, nested + controlled
 │   └── run_scaling.sh            trains all arms sequentially
 │
-├── demo/
+├── demo/                    ← worked examples, browsable: demo/README.md
+│   ├── README.md                 gallery: every sign, every signer
 │   ├── run_demo.sh               one photo, one prompt, one mp4
-│   └── assets/                   example input photo
+│   ├── inputs/                   the five source photographs
+│   ├── grids/                    one sign, five signers side by side (10)
+│   ├── clips/                    every signer × every sign (50)
+│   ├── stories/                  one signer, all ten signs (5)
+│   ├── showcase/                 the stitched presentation videos
+│   ├── gifs/                     inline-viewable versions
+│   ├── sheets/                   frame-by-frame contact sheet
+│   └── assets/                   example input photo for run_demo.sh
 │
 ├── results/
 │   └── hits/                     per-clip correct/incorrect
