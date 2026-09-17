@@ -1,29 +1,5 @@
 #!/usr/bin/env python3
-"""
-centroid_check.py
 
-ft retrieves its own gloss 0.96 of the time against a real->real ceiling of
-0.543, with NN distances matching real-real (ratio 1.021). Not copying — but
-above-ceiling retrieval still needs an explanation, and there is a natural one:
-
-  PROTOTYPE     the generated clip sits near the CENTROID of that gloss's real
-                clips. A centroid is closer to every member than members are to
-                each other, which produces above-ceiling top-1 AND a healthy
-                NN-distance ratio at the same time. Genuine generation, but of
-                "the average way to sign X", not of the range.
-
-  DIVERSE       generated clips sit among the real clips the way real clips sit
-                among each other — no closer to the centroid than a real clip
-                of the same gloss is.
-
-Decides whether the paper says "produces correct signs" or "produces a
-prototypical realization per gloss". Different claims.
-
-  python centroid_check.py \
-      --real-dir feats274 --wlasl $SA/WLASL_v0.3.json \
-      --glosses seen_glosses.json \
-      --gen base=gen_seen_base --gen ft=gen_seen_ft --gen kl01=gen_seen_kl01
-"""
 import argparse, json, re, sys
 from collections import defaultdict
 from pathlib import Path
