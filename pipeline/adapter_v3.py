@@ -1,35 +1,4 @@
-"""
-adapter_v3.py
-=============
-Same adapter as v2 (same architecture, same measured degradation, same
-737/129 clip split) but supervised with the RETARGETING LOSS instead of
-MSE on axis-angle.
 
-What changes vs v2:
-  - loss    : 3D hand-joint POSITION error after applying the pose to a
-              specific body shape, plus a velocity term  (retarget_loss.py)
-  - metric  : held-out position error in MILLIMETRES, not MPJAE in radians
-  - targets : precomputed retargeted GT joints (retarget_gt.npz)
-
-What stays identical, so the comparison is honest:
-  - degrade()  : range compression 0.35 + oversmooth k=9 + static freeze p=0.25
-  - Adapter    : 3-layer temporal conv, residual, hidden 128
-  - split      : train_idx / test_idx straight from adapter_data.npz
-  - optimiser  : Adam lr 1e-3, batch 64
-
-NOTE ON COMPARABILITY: v2's +3.6% is in radians (MPJAE); this reports mm.
-They are NOT directly comparable. The number to quote from this run is its
-own no-op-vs-adapter improvement, which replaces the v2 figure rather than
-sitting beside it.
-
-PADDING: make_windows zero-pads short tails. A zero POSE is not zero JOINT
-POSITIONS, so v3 tracks valid lengths and masks padded frames out of the
-loss instead of training against fictitious targets.
-
-Usage:
-    python adapter_v3.py --data .../adapter_data.npz \
-        --gt .../retarget_gt.npz --epochs 20 --w-vel 1.0
-"""
 import argparse
 
 import numpy as np
