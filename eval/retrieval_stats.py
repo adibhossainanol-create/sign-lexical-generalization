@@ -1,20 +1,5 @@
 #!/usr/bin/env python3
-"""
-retrieval_stats.py
 
-Takes the per-clip hits_seen_<name>.json files (gloss -> [0/1, ...]) written by
-seen_gloss_retrieval.py and turns them into confidence intervals plus a
-two-proportion z-test against a baseline config, so the top-1 numbers in the
-paper can be reported with error bars and a significance flag instead of bare
-point estimates.
-
-  python retrieval_stats.py \
-      --hits ft=hits_seen_ft.json --hits pres01=hits_seen_pres01.json \
-      --hits scratch=hits_seen_scratch.json --hits kl01=hits_seen_kl01.json \
-      --hits pres05=hits_seen_pres05.json --hits pres20=hits_seen_pres20.json \
-      --hits base=hits_seen_base.json \
-      --baseline base --chance 0.0446
-"""
 import argparse
 import json
 
