@@ -1,10 +1,3 @@
-"""
-handmdm_to_lhm_v2.py
-====================
-Fixed conversion using HandMDM's own np_feats_to_smplx logic exactly,
-including the negative sign on axis-angle conversion and lower body
-joint insertion.
-"""
 
 import argparse
 import json
