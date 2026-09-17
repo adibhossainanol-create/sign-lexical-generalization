@@ -1,28 +1,5 @@
 #!/usr/bin/env python3
-"""
-multi_subject_spotter.py
 
-Feeds paper_stats.py's contact_split() (item 8): scores every rendered HQ
-video against the BSLDict dictionary entry for its own gloss, using the
-same I3D+MLP embedding + cosine-similarity pipeline as bsldict/demo/demo.py
--- headless (no visualization), batched over every signer.
-
-Video naming convention in --raw-dir: s<signer>_<idx>_<gloss>.mp4
-(e.g. s1_01_good.mp4). For each gloss, the score is the MEAN across
-signers of that signer's own max similarity (max over sliding windows x
-dictionary versions) -- "multi-subject" because a single signer's video
-being an outlier (bad render, occlusion) shouldn't set the gloss's score.
-Per-signer scores are also printed so that can be checked.
-
-Run in the `bsldict_env` conda environment (needs the old torch/cv2 that
-environment pins), from anywhere -- paths are resolved relative to --bsldict.
-
-  conda activate bsldict_env
-  python multi_subject_spotter.py \
-      --raw-dir outputs/hq/raw \
-      --bsldict /path/to/bsldict \
-      --out spotter_scores.json
-"""
 import argparse
 import json
 import math
