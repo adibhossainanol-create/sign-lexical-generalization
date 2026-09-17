@@ -1,33 +1,4 @@
-"""
-amplify_hands_v3.py
-===================
-Per-HAND target-matched gain, with v2's per-JOINT clamping kept only as a
-safety valve.
 
-Why: HandMDM's under-articulation is per-hand, not global. In `here` and
-`thankyou` the active RIGHT hand already sits at ground-truth articulation
-(joint_var 0.025 / 0.017 vs the 0.024 SignAvatars anchor) while the LEFT hand
-is collapsed (0.0005 / 0.0013). A single --gain for both hands is wrong in
-one direction or the other:
-  - v1 (one capped gain per hand) throttled the right hand to 2.68 and let
-    the left take 6.0
-  - v2 (per-joint gain, uncapped by target) pushed the right hand to 16-25x
-    ground truth
-
-v3 instead asks each hand how far it is from the target and gains it by
-exactly that much:
-
-    gain = sqrt(target / raw_joint_var)      # joint_var is a variance
-    gain = clip(gain, 1.0, max_gain)         # never shrink, never wild
-
-A hand already at target gets gain 1.0 and is left untouched. Per-joint
-clamping then runs only to stop individual axes exceeding the anatomical
-ceiling -- it is a safety valve, not the amplification rule.
-
-Usage:
-    python amplify_hands_v3.py --in <smplx dir> --out <dir> \
-        --target 0.024 --max-gain 8.0 --ceiling 2.5
-"""
 import argparse
 import glob
 import json
