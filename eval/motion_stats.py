@@ -1,34 +1,4 @@
-"""
-motion_stats.py
-==============
-Characterizes the statistical properties of hand-motion sequences, so we
-can compare HandMDM output against SignAvatars ground truth and SEE where
-they diverge — that divergence is what the adapter's degradation should
-model (instead of synthetic jitter).
 
-No sign-matching needed: this compares DISTRIBUTIONS of motion behavior,
-not specific signs. Answers "does HandMDM's finger motion have the same
-velocity, smoothness, variance, and range as real signing?"
-
-Statistics per set of (F,90) hand-pose clips, reported PER HAND (left,
-right) as well as POOLED (both hands together, the old behaviour) — a
-pooled number can't answer asymmetry questions like the R/L articulation
-ratio, so both are printed:
-  - velocity    : mean |pose[t+1]-pose[t]|  (how fast fingers move)
-  - jerk        : mean |2nd difference|      (smoothness; high=jittery)
-  - joint_var   : mean per-joint variance    (range of articulation used)
-  - range       : mean per-joint (max-min)   (full extent of motion)
-  - still_frac  : fraction of near-static frames (mode collapse indicator)
-
-Reads either an adapter_data.npz (SignAvatars, key 'clips') or a dir of
-the pipeline's SMPL-X JSON (HandMDM output). Report both, compare.
-
-Usage:
-    # SignAvatars stats:
-    python motion_stats.py --npz .../adapter_data.npz --label signavatars
-    # HandMDM stats (a JSON dir it produced):
-    python motion_stats.py --json_dir .../handmdm_out/smplx_params --label handmdm
-"""
 
 import argparse
 import glob
