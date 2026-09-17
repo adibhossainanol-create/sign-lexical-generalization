@@ -1,44 +1,4 @@
 #!/usr/bin/env python3
-"""
-retrieval_eval.py -- pose-space retrieval evaluation for generated sign motion.
-
-QUESTION IT ANSWERS
-  Are generated signs the RIGHT signs, not just the right AMOUNT of motion?
-  For each generated clip we ask whether it is closest, in pose space, to REAL
-  clips of the SAME gloss rather than to clips of other glosses. Retrieval is
-  fairly robust to the over-articulation trap that fools art_ratio: a model
-  that just moves the hands more will still sit far from the correct real sign.
-
-THREE NUMBERS (mirrors the bsldict validation discipline)
-  1. real  -> real   (leave-one-out) : the CEILING and a validity check on the
-     metric itself. If this is near chance the feature space cannot tell signs
-     apart and every other number below is meaningless -- STOP and fix it.
-  2. base  -> real                    : what the un-fine-tuned model retrieves.
-  3. ft    -> real                    : the result. Beating base and approaching
-     the real->real ceiling is the correctness signal we are after.
-
-Everything runs on HandMDM-format 274-dim .npy clips of shape (F, 274).
-No rendering, no GPU. Two distances are reported side by side (a resampled-L2
-metric and DTW) so a single metric can't mislead us -- if they disagree, that
-is itself informative.
-
-274 layout: 0:78 body(13x6d) | 78:168 lhand(15x6d) | 168:258 rhand(15x6d)
-            | 258:264 jaw | 264:274 expr(zero in SignAvatars)
-
-USAGE (on your machine, in the `handmdm` env)
-  # 1) dump one generated clip per held-out gloss from each checkpoint into
-  #    gen_base/<gloss>.npy and gen_ft/<gloss>.npy  (reuse eval_finetune.py's
-  #    matched-length generation -- see the note at the bottom of this file).
-  # 2) then:
-  python retrieval_eval.py \
-      --real_dir feats274 \
-      --split adapter_data_gloss.npz \
-      --wlasl $SA/WLASL_v0.3.json \
-      --gen base=gen_base --gen ft=gen_ft
-
-  # sanity-check the scorer itself first (no data needed):
-  python retrieval_eval.py --selftest
-"""
 
 import argparse, glob, json, os, sys
 import numpy as np
