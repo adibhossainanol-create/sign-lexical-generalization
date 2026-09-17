@@ -1,33 +1,4 @@
-"""
-apply_adapter.py
-================
-Run the trained fusion adapter over a directory of LHM SMPL-X JSON frames.
 
-This is the missing link between the adapter experiments (which live entirely
-in pose space, scored in pos_mm / vel_mm / art_ratio) and the actual video
-pipeline (which consumes per-frame JSON). Until now the adapter's output has
-never been rendered, so nothing connects the adapter results to the system
-claim. This closes that gap.
-
-Reads   <in>/00000.json ... in frame order
-Writes  <out>/00000.json ... identical except lhand_pose / rhand_pose, which
-        are replaced by the adapter's refined values.
-
-Every other key is passed through untouched, so the output stays a valid
-input to LHM's inference.sh.
-
-Usage:
-    python apply_adapter.py --in  outputs/story1/07_nice_amp \
-                            --out outputs/story1_adapt/07_nice_amp \
-                            --ckpt /path/to/adapter_v3.pt
-
-Note on scope: the adapter was trained to undo a SYNTHETIC degradation
-(compress 0.35, smooth k=9, static-freeze p=0.25) applied to SignAvatars
-clips. Real HandMDM output is not that degradation, and it is ASL-trained
-being applied to BSL. Both are distribution shifts. Whatever this produces
-is out-of-distribution in two ways at once -- which is exactly why it needs
-measuring rather than assuming.
-"""
 import argparse
 import glob
 import json
