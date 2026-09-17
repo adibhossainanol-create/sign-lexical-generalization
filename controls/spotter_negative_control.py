@@ -1,30 +1,4 @@
-#!/usr/bin/env python3
-"""
-spotter_negative_control.py
 
-The multi-subject run gave same-gloss scores of 0.477-0.610 -- higher and far
-more uniform than the story1 evaluation (0.105-0.437), whose validated
-same-gloss mean was 0.394 against 0.101 for different-gloss pairs.
-
-Scores are not portable across preps, so a shifted scale is expected. What must
-be checked is whether the metric still SEPARATES in THIS prep:
-
-  separates  -> mismatched pairs score well below 0.477. The cross-signer
-                stability result stands as written.
-  collapsed  -> mismatched pairs also land near 0.55. Then only the RELATIVE
-                cross-signer comparison survives, and no absolute claim about
-                sign correctness can be made from these numbers.
-
-Scores each rendered clip against a DELIBERATELY WRONG keyword, using the same
-crop boxes, the same scale, the same setpts as multi_subject_spotter.py --
-identical prep is the whole point.
-
-  conda activate bsldict_env
-  python spotter_negative_control.py \
-      --raw-dir outputs/hq/raw \
-      --bsldict /path/to/bsldict \
-      --scores spotter_scores.json
-"""
 import argparse, json, subprocess, sys, tempfile, os, re, time
 from pathlib import Path
 from statistics import mean, pstdev
